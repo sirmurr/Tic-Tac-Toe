@@ -1,74 +1,66 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import CheckWin from "./CheckWin.js";
 import Mark from "./Mark.js";
+import TurnController from "./TurnController.js";
 
 function App() {
-  const [TL, setTL] = useState(false);
-  const [TM, setTM] = useState(false);
-  const [TR, setTR] = useState(false);
-  const [ML, setML] = useState(null);
-  const [MM, setMM] = useState(null);
-  const [MR, setMR] = useState(false);
-  const [LL, setLL] = useState(null);
-  const [LM, setLM] = useState(true);
-  const [LR, setLR] = useState(null);
+  const [board, setBoard] = useState([
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ]);
 
-  const [playerTurn, setPlayerTurn] = useState(true); //will be T/F. T: X, F: Y, always starting with X
+  const [playerTurn, setPlayerTurn] = useState(true); // will be T/F. T: X, F: O, always starting with X
   const [winner, setWinner] = useState(null); // set to winning player when state reached
 
-  // PLay a turn then check for win then play next turn
+  // Play a turn then check for win then play next turn
+  const playMove = TurnController(
+    board,
+    playerTurn,
+    setBoard,
+    setPlayerTurn,
+    winner,
+    setWinner
+  );
 
-  useEffect(() => {
-    let Board = [
-      [TL, TM, TR],
-      [ML, MM, MR],
-      [LL, LM, LR],
-    ];
+  const resetGame = () => {
+    setBoard([
+      [null, null, null],
+      [null, null, null],
+      [null, null, null],
+    ]);
+    setPlayerTurn(true); // Reset to X's turn
+    setWinner(null); // Clear the winner
+  };
 
-    if (CheckWin(Board, playerTurn)) {
-      setWinner(playerTurn ? "X" : "O");
-    }
-    // } else {
-    //   setPlayerTurn(!playerTurn);
-    // }
-  }, [TL, TM, TR, ML, MM, MR, LL, LM, LR, playerTurn]);
+  // Logging to verify the state updates
+  console.log("Board state:", board);
+  console.log("Player turn:", playerTurn);
+  console.log("Winner:", winner);
 
   return (
     <div className="App">
       <h1 className="App-header">Tic-Tac-Toe</h1>
-      <div className="Board" /*Naming: (Top/Middle/Bottom-Left/Middle/Right)*/>
-        <div id="T-L" className="Square">
-          <h2>{Mark(TL)}</h2>
-        </div>
-        <div id="T-M" className="Square">
-          <h2>{Mark(TM)}</h2>
-        </div>
-        <div id="T-R" className="Square">
-          <h2>{Mark(TR)}</h2>
-        </div>
-        <div id="M-L" className="Square">
-          <h2>{Mark(ML)}</h2>
-        </div>
-        <div id="M-M" className="Square">
-          <h2>{Mark(MM)}</h2>
-        </div>
-        <div id="M-R" className="Square">
-          <h2>{Mark(MR)}</h2>
-        </div>
-        <div id="B-L" className="Square">
-          <h2>{Mark(LL)}</h2>
-        </div>
-        <div id="B-M" className="Square">
-          <h2>{Mark(LM)}</h2>
-        </div>
-        <div id="B-R" className="Square">
-          <h2>{Mark(LR)}</h2>
-        </div>
+      <h3>Current Player Turn: {Mark(playerTurn)}</h3>
+      <div className="Board">
+        {board.map((row, rowIndex) =>
+          row.map((cell, colIndex) => (
+            <button
+              key={`${rowIndex}-${colIndex}`}
+              className="Square"
+              onClick={() => playMove(rowIndex, colIndex)}
+              disabled={cell !== null || winner !== null}
+            >
+              {cell}
+            </button>
+          ))
+        )}
       </div>
-      <div>
-        {winner !== null ? <h3>The winner is {Mark(winner)}</h3> : null}
-      </div>
+      <div>{winner !== null ? <h3>The winner is {winner}</h3> : null}</div>
+      <button key="reset" className="reset-button" onClick={() => resetGame()}>
+        Reset Game
+      </button>
     </div>
   );
 }

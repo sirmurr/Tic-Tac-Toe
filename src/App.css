@@ -4,8 +4,8 @@
 
 .Board {
   display: grid;
-  grid-template-columns: repeat(3, 160px); /* 3 columns of 80px each */
-  grid-template-rows: repeat(3, 160px); /* 3 rows of 80px each */
+  grid-template-columns: repeat(3, 160px); /* 3 columns of 160px each */
+  grid-template-rows: repeat(3, 160px); /* 3 rows of 160px each */
   gap: 10px; /* Adds space between squares */
   justify-content: center; /* Centers the grid horizontally */
   align-content: center; /* Centers the grid vertically */
@@ -15,12 +15,28 @@
 .Square {
   background-color: #8ca0ff;
   border-color: #607afc;
-  width: 140px;
-  height: 140px;
+  width: 160px; /* Increase width for better spacing */
+  height: 160px; /* Increase height for better spacing */
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 24px;
   border-radius: 10px;
   cursor: pointer;
+}
+
+.reset-button {
+  margin-top: 20px; /* Increase top margin for spacing */
+  padding: 12px 24px; /* Increase padding for larger button */
+  margin-bottom: 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reset-button:hover {
+  background-color: #0056b3;
 }
